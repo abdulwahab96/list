@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1032113151917",
+    "firebase_url": "https://market-creators.firebaseio.com",
+    "project_id": "market-creators",
+    "storage_bucket": "market-creators.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032113151917:android:835a39ba0262808824cb24",
+        "android_client_info": {
+          "package_name": "com.abdulwahab.listclickditails"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032113151917-2scmei9b09iev26r7nq4r721ujj8ncir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJjHhyfBDMp2qlDN6_hccOeDevQfuuB6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032113151917-2scmei9b09iev26r7nq4r721ujj8ncir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
