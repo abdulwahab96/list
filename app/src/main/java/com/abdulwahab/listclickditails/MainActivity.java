@@ -25,8 +25,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
 
-    private static ArrayList<Product> products;
-    private static ProductAdapter mAdapter;
+    static ArrayList<Product> products;
+    static ProductAdapter mAdapter;
     private ListView productListView;
 
     @Override

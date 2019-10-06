@@ -31,13 +31,17 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
 
     static Toolbar toolbar;
     Product p;
+    boolean imageُxists = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         final CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(getIntent().getStringExtra("product_name"));
+       // toolbarLayout.setTitle("");
+        TextView titleTv = (TextView)findViewById(R.id.title);
+        titleTv.setText(getIntent().getStringExtra("product_name"));
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,6 +54,9 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         toolbarLayout.setBackground(new BitmapDrawable(getResources(), resource));
+                        if (toolbarLayout.getBackground() != null) {
+                            imageُxists = true;
+                        }
                     }
 
                     @Override
@@ -61,14 +68,14 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
         TextView product_details = (TextView) findViewById(R.id.product_details);
         product_details.setText(getIntent().getStringExtra("product_details"));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
     }
 
     @Override
@@ -93,8 +100,10 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
     }
 
     public void openImage(View view) {
-        Intent intent = new Intent(DetailsActivity.this, OpenImageActivity.class);
-        intent.putExtra("MyClass", (Serializable) p);
-        startActivity(intent);
+        if (imageُxists) {
+            Intent intent = new Intent(DetailsActivity.this, OpenImageActivity.class);
+            intent.putExtra("MyClass", (Serializable) p);
+            startActivity(intent);
+        }
     }
 }
