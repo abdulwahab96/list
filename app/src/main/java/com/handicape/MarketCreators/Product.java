@@ -1,6 +1,4 @@
-package com.abdulwahab.listclickditails;
-
-import android.graphics.Bitmap;
+package com.handicape.MarketCreators;
 
 import java.io.Serializable;
 

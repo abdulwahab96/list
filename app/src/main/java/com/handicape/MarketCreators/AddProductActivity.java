@@ -1,4 +1,4 @@
-package com.abdulwahab.listclickditails;
+package com.handicape.MarketCreators;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +55,7 @@ public class AddProductActivity extends AppCompatActivity {
         Button upload = (Button) findViewById(R.id.upload);
         img = (ImageView) findViewById(R.id.gallery);
 
+        // إختر صورة من الإستوديوا
         upload.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -67,6 +68,7 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
 
+    // عند إختيار الصورة من الإستوديوا
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,6 +100,7 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
 
+    // عند الضعظ على زر إضافة المنتج قم بإضافنه على قاعد البيانات
     public void btn_add(View view) {
         img = (ImageView) findViewById(R.id.gallery);
         Name = (EditText) findViewById(R.id.Name);
@@ -110,11 +113,13 @@ public class AddProductActivity extends AppCompatActivity {
         uploadData();
     }
 
+    // الإنتقال إلى أكتيفيتي عرض قائمة المنتجات
     public void openListProduct(View view) {
         Intent intent = new Intent(AddProductActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
+    // إرفع البيانات إلى القاعدة
     private synchronized void uploadData() {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

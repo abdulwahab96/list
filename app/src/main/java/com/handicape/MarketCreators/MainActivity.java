@@ -1,10 +1,9 @@
-package com.abdulwahab.listclickditails;
+package com.handicape.MarketCreators;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -50,24 +48,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
-       /* Product product1 = new Product("cake", "25$", "7",
-                "khaled", "syria, homs", "it's very nice!");
-
-        Product product2 = new Product("cake", "25$", "7",
-                "khaled", "syria, homs", "it's very nice!");
-        Product product3 = new Product("cake", "25$", "7",
-                "khaled", "syria, homs", "it's very nice!");
-        Product product4 = new Product("cake", "25$", "7",
-                "khaled", "syria, homs", "it's very nice!");
-        Product product5 = new Product("cake", "25$", "7",
-                "khaled", "syria, homs", "it's very nice!");
-
-        products.add(product1);
-        products.add(product2);
-        products.add(product3);
-        products.add(product4);
-        products.add(product5);*/
-
         mAdapter = new ProductAdapter(this, products);
         productListView.setAdapter(mAdapter);
 
@@ -76,31 +56,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void initDatabsae() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-      /*  Map<String, Object> product = new HashMap<>();
-        product.put("name", "cak");
-        product.put("address_owner", "syria");
-        product.put("details_product", "it's very nice!!");
-        product.put("number_of_pieces", "150");
-        product.put("price", "2$");
-        product.put("name_owner", "Abdulwahab");
-
-        // Add a new document with a generated ID
-        db.collection("products")
-                .add(product)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error adding document", e);
-                    }
-                });*/
-
-
         db.collection("products")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

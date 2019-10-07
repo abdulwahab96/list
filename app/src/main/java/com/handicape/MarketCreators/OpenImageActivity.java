@@ -1,22 +1,18 @@
-package com.abdulwahab.listclickditails;
+package com.handicape.MarketCreators;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
-import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-
-import static com.abdulwahab.listclickditails.DetailsActivity.toolbar;
 
 public class OpenImageActivity extends AppCompatActivity {
 
