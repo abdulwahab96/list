@@ -11,6 +11,8 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,23 +102,9 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
 
-    // عند الضعظ على زر إضافة المنتج قم بإضافنه على قاعد البيانات
-    public void btn_add(View view) {
-        img = (ImageView) findViewById(R.id.gallery);
-        Name = (EditText) findViewById(R.id.Name);
-        p_Name = (EditText) findViewById(R.id.p_Name);
-        address = (EditText) findViewById(R.id.address);
-        available = (EditText) findViewById(R.id.available);
-        price = (EditText) findViewById(R.id.price);
-        details = (EditText)findViewById(R.id.p_details);
-
-        uploadData();
-    }
-
     // الإنتقال إلى أكتيفيتي عرض قائمة المنتجات
     public void openListProduct(View view) {
-        Intent intent = new Intent(AddProductActivity.this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     // إرفع البيانات إلى القاعدة
@@ -166,8 +154,7 @@ public class AddProductActivity extends AppCompatActivity {
                                             Log.w("TAG", "Error adding document", e);
                                         }
                                     });
-                            Intent intent = new Intent(AddProductActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            finish();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -188,5 +175,32 @@ public class AddProductActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_product, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // عند الضعظ على زر إضافة المنتج قم بإضافنه على قاعد البيانات
+        if (id == R.id.add_done) {
+            img = (ImageView) findViewById(R.id.gallery);
+            Name = (EditText) findViewById(R.id.Name);
+            p_Name = (EditText) findViewById(R.id.p_Name);
+            address = (EditText) findViewById(R.id.address);
+            available = (EditText) findViewById(R.id.available);
+            price = (EditText) findViewById(R.id.price);
+            details = (EditText) findViewById(R.id.p_details);
+
+            uploadData();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
 

@@ -2,7 +2,7 @@ package com.handicape.MarketCreators;
 
 import java.io.Serializable;
 
-class  Product implements Serializable{
+public class Product implements Serializable{
     private String name_product;
     private String price_product;
     private String number_of_product;

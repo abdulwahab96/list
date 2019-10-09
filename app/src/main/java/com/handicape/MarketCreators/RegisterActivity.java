@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,7 +38,8 @@ import java.util.UUID;
 public class RegisterActivity extends AppCompatActivity {
 
     Button registration_button;
-    EditText ed_user_name, ed_user_pass, ed_user_email;
+    EditText ed_user_name, ed_user_email;
+    TextInputEditText ed_user_pass;
     TextView txt_have_acc;
     ImageView user_img;
     Uri photo_uri;
@@ -141,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (photo_uri != null) {
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle("Signing up...");
             progressDialog.show();
 
             imageName = UUID.randomUUID().toString();
@@ -197,6 +199,10 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         } else {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Signing up...");
+            progressDialog.show();
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String, Object> product = new HashMap<>();
             product.put("name", user_name);
@@ -210,6 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
+                            progressDialog.dismiss();
                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
                             Toast.makeText(RegisterActivity.this, "Register done!", Toast.LENGTH_SHORT).show();
                         }
@@ -218,6 +225,13 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.w("TAG", "Error adding document", e);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
                         }
                     });
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);

@@ -27,27 +27,36 @@
         android:padding="10dp"
         android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/log_pass"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etPasswordLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
-        android:background="#EEEEEE"
-        android:hint="@string/pass"
-        android:padding="10dp"
-        android:textAlignment="center" />
+        android:gravity="center"
+        app:hintEnabled="false"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/log_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE"
+            android:hint="           Password"
+            android:inputType="textPassword"
+            android:textAlignment="center" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/log_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:onClick="logInClick"
         android:padding="10dp"
         android:text="@string/login_btn"
         android:textAllCaps="false"
         android:textColor="#fff"
-        android:textSize="20sp"
-        android:onClick="logInClick"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/forget_pass"
