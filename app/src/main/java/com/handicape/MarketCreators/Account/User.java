@@ -1,4 +1,4 @@
-package com.handicape.MarketCreators;
+package com.handicape.MarketCreators.Account;
 
 public class User {
 

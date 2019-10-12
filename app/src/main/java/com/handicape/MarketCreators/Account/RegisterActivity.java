@@ -1,4 +1,4 @@
-package com.handicape.MarketCreators;
+package com.handicape.MarketCreators.Account;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,16 +18,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.handicape.MarketCreators.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -82,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
         user_pass = ed_user_pass.getText().toString();
         user_email = ed_user_email.getText().toString();
 
-        if (user_email.matches("^(.+)@(.+)$")) {
+      /*  if (user_email.matches("^(.+)@(.+)$")) {
             if (true) {//validEmailOnline(user_email)
                 if (user_name.matches("[a-zA-Z0-9\\._\\-]{3,}")) {
                     if (!user_pass.isEmpty()) {
@@ -94,44 +98,115 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(RegisterActivity.this, "8 char password!", Toast.LENGTH_SHORT).show();
                 }*/
-                } else {
+            /*    } else {
                     Toast.makeText(RegisterActivity.this, "Invalid Username!", Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
             Toast.makeText(RegisterActivity.this, "Invalid Email!", Toast.LENGTH_SHORT).show();
+        }*/
+
+        if (validEmailOnline(user_email)) {
+
+        } else {
+            Toast.makeText(RegisterActivity.this, "Ok, Email is not registered.", Toast.LENGTH_LONG).show();
+
         }
 
     }
 
     // تحقق من أن الإيميل لم يسجل من قبل
-    private boolean validEmailOnline(String user_email) {
+    private boolean validEmailOnline(final String user_email) {
 
         final boolean[] notExist = new boolean[1];
+        notExist[0] = false;
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Email verification is in progress...");
+        progressDialog.show();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereEqualTo("email", user_email)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                document.getId();
+                                User user = document.toObject(User.class);
+//                                Log.d("-----", document.getId() + " => " + user.getName());
+//                                User.loginSuccess=true;
+                                if (user != null) {
+                                    Toast.makeText(RegisterActivity.this, "Sorry, the email is already registered!", Toast.LENGTH_LONG).show();
+                                    notExist[0] = true;
+                                    break;
+                                }
+                            }
+                            progressDialog.dismiss();
 
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            Toast.makeText(RegisterActivity.this, "This email is already registered", Toast.LENGTH_LONG).show();
-                            notExist[0] = false;
+//                            finish();
 
                         } else {
-                            notExist[0] = true;
-
+                            Log.d("-----", "Error getting documents: ", task.getException());
+                            progressDialog.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
                         }
+
+
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(RegisterActivity.this, "error net", Toast.LENGTH_SHORT).show();
-            }
-        });
-        Toast.makeText(RegisterActivity.this, notExist[0] + "", Toast.LENGTH_SHORT).show();
+                })
+                /*.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        Log.d("-----", queryDocumentSnapshots.toString());
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_LONG).show();
+
+                            setProfileData();
+                            finish();
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "Login Faild", Toast.LENGTH_LONG).show();
+                        }
+//                        Toast.makeText(LoginActivity.this, queryDocumentSnapshots.isEmpty()+ " ", Toast.LENGTH_LONG).show();
+                    }
+
+                })*/
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, "Login Faild", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("users")
+//                .whereEqualTo("email", user_email)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//
+//                        if (!queryDocumentSnapshots.isEmpty()) {
+//                            Toast.makeText(RegisterActivity.this, "This email is already registered", Toast.LENGTH_LONG).show();
+//                            notExist[0] = false;
+//
+//                        } else {
+//                            notExist[0] = true;
+//
+//                        }
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(RegisterActivity.this, "error net", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        Toast.makeText(RegisterActivity.this, notExist[0] + "", Toast.LENGTH_SHORT).show();
         return notExist[0];
     }
 
@@ -179,8 +254,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             Log.w("TAG", "Error adding document", e);
                                         }
                                     });
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            finish();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -234,8 +308,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
                         }
                     });
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(intent);
+            finish();
         }
 
     }
@@ -247,7 +320,7 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(i, "Select Your Photo"), 1);
     }
 
-    // عند إختيار الصورة من الإستوديوا
+    // نتيجة إختيار الصورة من الإستوديوا
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

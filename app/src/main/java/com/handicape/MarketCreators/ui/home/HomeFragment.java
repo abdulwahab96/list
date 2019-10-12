@@ -23,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.handicape.MarketCreators.DetailsActivity;
-import com.handicape.MarketCreators.MainActivity;
 import com.handicape.MarketCreators.Product;
 import com.handicape.MarketCreators.ProductAdapter;
 import com.handicape.MarketCreators.R;
@@ -37,6 +36,7 @@ public class HomeFragment extends Fragment implements Serializable {
     static ArrayList<Product> products;
     static ProductAdapter mAdapter;
     private ListView productListView;
+    public static int id;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment implements Serializable {
                 textView.setText(s);
             }
         });*/
+        id = container.getId();
         products = new ArrayList<Product>();
         productListView = (ListView) root.findViewById(R.id.list_view);
 
@@ -109,8 +110,12 @@ public class HomeFragment extends Fragment implements Serializable {
     }
 
     private void hide_progress() {
-        ProgressBar progressBar = (ProgressBar)getView(). findViewById(R.id.loading_indicator);
-        progressBar.setVisibility(View.INVISIBLE);
+        try {
+            ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.loading_indicator);
+            progressBar.setVisibility(View.INVISIBLE);
+        } catch (NullPointerException e) {
+
+        }
     }
 
     private void showText() {
@@ -118,4 +123,5 @@ public class HomeFragment extends Fragment implements Serializable {
         TextView empty_text = (TextView) getView().findViewById(R.id.empty_view);
         empty_text.setVisibility(View.VISIBLE);
     }
+
 }

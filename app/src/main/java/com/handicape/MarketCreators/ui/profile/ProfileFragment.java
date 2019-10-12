@@ -24,11 +24,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.handicape.MarketCreators.MainProductActivity;
+import com.handicape.MarketCreators.Account.SessionSharedPreference;
 import com.handicape.MarketCreators.R;
-import com.handicape.MarketCreators.User;
+import com.handicape.MarketCreators.Account.User;
 
-import static com.handicape.MarketCreators.User.loginSuccess;
+import static com.handicape.MarketCreators.Account.User.loginSuccess;
+import static com.handicape.MarketCreators.Account.User.url_image;
+import static com.handicape.MarketCreators.MainProductActivity.decodeBase64;
 
 public class ProfileFragment extends Fragment {
 
@@ -84,6 +86,13 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+        if (url_image.length() == 0){
+            String i = SessionSharedPreference.getImage(getActivity().getApplicationContext());
+            if (i.length() > 0) {
+                proImage.setImageBitmap(decodeBase64(i));
+            }
+        }
         return root;
     }
 }

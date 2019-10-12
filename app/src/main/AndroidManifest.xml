@@ -22,9 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".Account.RegisterActivity"></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Account.LoginActivity"
             android:label="Sign in">
 
         </activity>
@@ -32,7 +32,6 @@
             android:name=".AddProductActivity"
             android:label="Add Product"></activity>
         <activity android:name=".OpenImageActivity" />
-        <activity android:name=".MainActivity" />
         <activity
             android:name=".DetailsActivity"
             android:label=""

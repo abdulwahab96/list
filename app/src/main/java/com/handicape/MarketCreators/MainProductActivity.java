@@ -2,6 +2,7 @@ package com.handicape.MarketCreators;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,7 +29,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.handicape.MarketCreators.ui.profile.ProfileFragment;
+import com.handicape.MarketCreators.Account.LoginActivity;
+import com.handicape.MarketCreators.Account.RegisterActivity;
+import com.handicape.MarketCreators.Account.SessionSharedPreference;
+import com.handicape.MarketCreators.Account.User;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -38,10 +43,13 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static com.handicape.MarketCreators.User.email;
-import static com.handicape.MarketCreators.User.loginSuccess;
-import static com.handicape.MarketCreators.User.url_image;
-import static com.handicape.MarketCreators.User.name;
+import java.io.ByteArrayOutputStream;
+
+import static com.handicape.MarketCreators.Account.SessionSharedPreference.setImageSherPref;
+import static com.handicape.MarketCreators.Account.User.email;
+import static com.handicape.MarketCreators.Account.User.loginSuccess;
+import static com.handicape.MarketCreators.Account.User.url_image;
+import static com.handicape.MarketCreators.Account.User.name;
 
 public class MainProductActivity extends AppCompatActivity {
 
@@ -49,6 +57,7 @@ public class MainProductActivity extends AppCompatActivity {
     NavigationView navigationView;
     View header;
     FloatingActionButton fab;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +74,36 @@ public class MainProductActivity extends AppCompatActivity {
 
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
 
         navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_profile, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_home, R.id.nav_profile,
+                R.id.nav_tools, R.id.nav_share)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        checkSession(); // هل المستخدم مسجل دخول من قبل لجلب بياناته
+    }
+
+    // هل المستخدم مسجل دخول من قبل لجلب بياناته
+    private void checkSession() {
+        // Check if UserResponse is Already Logged In
+        if (SessionSharedPreference.getLoggedStatus(getApplicationContext())) {
+            // الزبون مسجل دخول مسبقا إجلب بياناته وإعرضها
+            String n = SessionSharedPreference.getUserName(getApplicationContext());
+            String e = SessionSharedPreference.getEmail(getApplicationContext());
+
+            if (n.length() > 0 && e.length() > 0) {
+                User user = new User(n,e,"",true);
+                setProfileData();
+            }
+        }
     }
 
     @Override
@@ -113,11 +139,12 @@ public class MainProductActivity extends AppCompatActivity {
 //        Toast.makeText(MainProductActivity.this,"onResume",Toast.LENGTH_LONG).show();
         if (login_btn.getVisibility() != View.GONE) {
             if (loginSuccess) {
-                setProfileData();
+                setProfileData();     // أظهر بيانات المستخدم بعد تسجيل الدخول
             }
         }
     }
 
+    // أظهر بيانات المستخدم بعد تسجيل الدخول
     private void setProfileData() {
         fab.show();
 
@@ -143,6 +170,7 @@ public class MainProductActivity extends AppCompatActivity {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 user_image_view.setImageBitmap(resource);
+                                setImageSherPref(getApplicationContext(), encodeTobase64(resource));
                             }
 
                             @Override
@@ -165,6 +193,13 @@ public class MainProductActivity extends AppCompatActivity {
         email_tv.setVisibility(View.VISIBLE);
 
         hideBtnLogReg();
+
+        if (url_image.length() == 0){
+            String i = SessionSharedPreference.getImage(getApplicationContext());
+            if (i.length() > 0) {
+                user_image_view.setImageBitmap(decodeBase64(i));
+            }
+        }
     }
 
     private void hideBtnLogReg() {
@@ -179,8 +214,60 @@ public class MainProductActivity extends AppCompatActivity {
     }
 
     public void openProfileFragment(View view) {
+       /* navigationView.getMenu().getItem(1).setChecked(true);
+        navigationView.setCheckedItem(R.id.nav_profile);
+
+        drawer.closeDrawer(Gravity.LEFT); //Edit Gravity.START need API 14
+
+        this.getSupportFragmentManager().beginTransaction()
+                .remove(new HomeFragment())
+                .replace(HomeFragment.id, new ProfileFragment())
+                .addToBackStack(null)
+                .commit();*/
+
        /* FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, new ProfileFragment());
+        transaction.show(new ProfileFragment());
         transaction.commit();*/
+    }
+
+    // method for bitmap to base64
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immage = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+
+//        Log.d("Image Log:", imageEncoded);
+        return imageEncoded;
+    }
+
+    // method for base64 to bitmap
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    public void logoutBtn(MenuItem item) {
+        fab.hide();
+        header = navigationView.getHeaderView(0);
+
+        TextView user_name_tv = header.findViewById(R.id.user_name_tv);
+        TextView email_tv = header.findViewById(R.id.email_tv);
+
+        user_name_tv.setVisibility(View.GONE);
+        email_tv.setVisibility(View.GONE);
+
+        TextView login_btn = header.findViewById(R.id.login_btn);
+        TextView labeled_v = header.findViewById(R.id.labeled_v);
+        TextView register_btn = header.findViewById(R.id.register_btn);
+
+        login_btn.setVisibility(View.VISIBLE);
+        labeled_v.setVisibility(View.VISIBLE);
+        register_btn.setVisibility(View.VISIBLE);
+
+        SessionSharedPreference.setLoggedIn(getApplicationContext(), false, "", "");
+        SessionSharedPreference.setImageSherPref(getApplicationContext(), "");
     }
 }

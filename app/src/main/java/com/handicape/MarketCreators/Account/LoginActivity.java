@@ -1,33 +1,26 @@
-package com.handicape.MarketCreators;
+package com.handicape.MarketCreators.Account;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.handicape.MarketCreators.R;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -76,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // تحقق من صحة بيانات تسجيل الدخول من قاعدة البيانات
-    private void validData(String email, String pass) {
+    private void validData(final String email, String pass) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
@@ -95,10 +88,12 @@ public class LoginActivity extends AppCompatActivity {
 //                                document.getId();
                                 User user = document.toObject(User.class);
 //                                Log.d("-----", document.getId() + " => " + user.getName());
-                                User.loginSuccess=true;
+                                User.loginSuccess = true;
                             }
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_LONG).show();
+                            // Set Logged In statue to 'true'
+                            SessionSharedPreference.setLoggedIn(getApplicationContext(), true,User.name,User.email );
                             finish();
 
                         } else {
@@ -115,9 +110,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
                             setProfileData();
-                            startActivity(intent);
+                            finish();
                         } else {
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Login Faild", Toast.LENGTH_LONG).show();
