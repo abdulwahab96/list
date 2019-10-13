@@ -31,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.handicape.MarketCreators.MainProductActivity;
 import com.handicape.MarketCreators.R;
 
 import java.io.FileNotFoundException;
@@ -77,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         ed_user_email = findViewById(R.id.user_registration_email);
         txt_have_acc = findViewById(R.id.have_account);
         user_img = (ImageView) findViewById(R.id.user_image);
+
     }
 
     // عند الضعط على إنشاء حساب
@@ -86,45 +88,38 @@ public class RegisterActivity extends AppCompatActivity {
         user_pass = ed_user_pass.getText().toString();
         user_email = ed_user_email.getText().toString();
 
-      /*  if (user_email.matches("^(.+)@(.+)$")) {
-            if (true) {//validEmailOnline(user_email)
-                if (user_name.matches("[a-zA-Z0-9\\._\\-]{3,}")) {
-                    if (!user_pass.isEmpty()) {
+        if (user_email.matches("^(.+)@(.+)$")) {
 
-                        uploadData(); //إرفع البيانات إلى القاعدة
-                    }
+            if (user_name.matches("[a-zA-Z0-9\\._\\-]{3,}")) {
+                if (!user_pass.isEmpty()) {
+
+//                    validEmailOnline(user_email);
+                    uploadData();
+
+                }
                /* if (user_pass.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) {
 
                 } else {
                     Toast.makeText(RegisterActivity.this, "8 char password!", Toast.LENGTH_SHORT).show();
                 }*/
-            /*    } else {
-                    Toast.makeText(RegisterActivity.this, "Invalid Username!", Toast.LENGTH_SHORT).show();
-                }
+            } else {
+                Toast.makeText(RegisterActivity.this, "Invalid Username!", Toast.LENGTH_SHORT).show();
             }
+
         } else {
             Toast.makeText(RegisterActivity.this, "Invalid Email!", Toast.LENGTH_SHORT).show();
-        }*/
-
-        if (validEmailOnline(user_email)) {
-
-        } else {
-            Toast.makeText(RegisterActivity.this, "Ok, Email is not registered.", Toast.LENGTH_LONG).show();
-
         }
+
 
     }
 
     // تحقق من أن الإيميل لم يسجل من قبل
-    private boolean validEmailOnline(final String user_email) {
-
-        final boolean[] notExist = new boolean[1];
-        notExist[0] = false;
-
+    private void validEmailOnline(final String user_email) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Email verification is in progress...");
         progressDialog.show();
 
+        final User[] user = new User[1];
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereEqualTo("email", user_email)
@@ -135,18 +130,20 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 //                                document.getId();
-                                User user = document.toObject(User.class);
+                                user[0] = document.toObject(User.class);
 //                                Log.d("-----", document.getId() + " => " + user.getName());
 //                                User.loginSuccess=true;
-                                if (user != null) {
+                                if (user[0] != null) {
                                     Toast.makeText(RegisterActivity.this, "Sorry, the email is already registered!", Toast.LENGTH_LONG).show();
-                                    notExist[0] = true;
+                                    progressDialog.dismiss();
                                     break;
                                 }
                             }
-                            progressDialog.dismiss();
+                            if (user[0] == null) {
+                                progressDialog.dismiss();
+//                                Toast.makeText(RegisterActivity.this, "ok...", Toast.LENGTH_LONG).show();
+                            }
 
-//                            finish();
 
                         } else {
                             Log.d("-----", "Error getting documents: ", task.getException());
@@ -157,67 +154,26 @@ public class RegisterActivity extends AppCompatActivity {
 
                     }
                 })
-                /*.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        Log.d("-----", queryDocumentSnapshots.toString());
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            progressDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_LONG).show();
-
-                            setProfileData();
-                            finish();
-                        } else {
-                            progressDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Login Faild", Toast.LENGTH_LONG).show();
-                        }
-//                        Toast.makeText(LoginActivity.this, queryDocumentSnapshots.isEmpty()+ " ", Toast.LENGTH_LONG).show();
-                    }
-
-                })*/
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Login Faild", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
+
                     }
                 });
 
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("users")
-//                .whereEqualTo("email", user_email)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//
-//                        if (!queryDocumentSnapshots.isEmpty()) {
-//                            Toast.makeText(RegisterActivity.this, "This email is already registered", Toast.LENGTH_LONG).show();
-//                            notExist[0] = false;
-//
-//                        } else {
-//                            notExist[0] = true;
-//
-//                        }
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(RegisterActivity.this, "error net", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        Toast.makeText(RegisterActivity.this, notExist[0] + "", Toast.LENGTH_SHORT).show();
-        return notExist[0];
+
     }
 
     //إرفع البيانات إلى القاعدة
     private void uploadData() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
         if (photo_uri != null) {
-
-            final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Signing up...");
             progressDialog.show();
 
@@ -228,7 +184,6 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
 //                            Toast.makeText(RegisterActivity.this, "Uploaded Done", Toast.LENGTH_SHORT).show();
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -246,22 +201,30 @@ public class RegisterActivity extends AppCompatActivity {
                                         public void onSuccess(DocumentReference documentReference) {
                                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
                                             Toast.makeText(RegisterActivity.this, "Register done!", Toast.LENGTH_SHORT).show();
+
+                                            User.loginSuccess = true;
+                                            User.email = user_email;
+                                            User.name = user_name;
+                                            User.url_image = imageName;
+
+                                            progressDialog.dismiss();
+                                            SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Log.w("TAG", "Error adding document", e);
+                                            progressDialog.dismiss();
                                         }
                                     });
-                            finish();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
                             Toast.makeText(RegisterActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -273,10 +236,9 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Signing up...");
             progressDialog.show();
-
+            
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String, Object> product = new HashMap<>();
             product.put("name", user_name);
@@ -290,25 +252,31 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            progressDialog.dismiss();
                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
                             Toast.makeText(RegisterActivity.this, "Register done!", Toast.LENGTH_SHORT).show();
+                            User.loginSuccess = true;
+                            User.email = user_email;
+                            User.name = user_name;
+                            SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
+                            progressDialog.dismiss();
+                            finish();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.w("TAG", "Error adding document", e);
+                            progressDialog.dismiss();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
                             Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
                     });
-            finish();
         }
 
     }
@@ -350,4 +318,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     }
+
+    private void killActivity() {
+        Intent intent = new Intent(RegisterActivity.this, MainProductActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

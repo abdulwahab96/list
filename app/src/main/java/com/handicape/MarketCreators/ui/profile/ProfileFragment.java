@@ -87,12 +87,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        if (url_image.length() == 0){
-            String i = SessionSharedPreference.getImage(getActivity().getApplicationContext());
-            if (i.length() > 0) {
-                proImage.setImageBitmap(decodeBase64(i));
+        if (url_image != null)
+            if (url_image.length() == 0) {
+                String i = SessionSharedPreference.getImage(getActivity().getApplicationContext());
+                if (i.length() > 0) {
+                    proImage.setImageBitmap(decodeBase64(i));
+                }
             }
-        }
         return root;
     }
 }

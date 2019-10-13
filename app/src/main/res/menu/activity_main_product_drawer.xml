@@ -26,7 +26,8 @@
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/logout"
                     android:title="@string/menu_logout"
-                    android:onClick="logoutBtn"/>
+                    android:onClick="logoutBtn"
+                    android:visible="false"/>
             </menu>
         </item>
 

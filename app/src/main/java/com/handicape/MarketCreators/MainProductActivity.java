@@ -42,6 +42,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
@@ -100,7 +101,7 @@ public class MainProductActivity extends AppCompatActivity {
             String e = SessionSharedPreference.getEmail(getApplicationContext());
 
             if (n.length() > 0 && e.length() > 0) {
-                User user = new User(n,e,"",true);
+                User user = new User(n, e, "", true);
                 setProfileData();
             }
         }
@@ -136,13 +137,16 @@ public class MainProductActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView login_btn = header.findViewById(R.id.login_btn);
+        TextView reg_btn = header.findViewById(R.id.register_btn);
 //        Toast.makeText(MainProductActivity.this,"onResume",Toast.LENGTH_LONG).show();
-        if (login_btn.getVisibility() != View.GONE) {
+        if (login_btn.getVisibility() != View.GONE | reg_btn.getVisibility() == View.VISIBLE) {
             if (loginSuccess) {
+//                Toast.makeText(MainProductActivity.this, loginSuccess + "onResume", Toast.LENGTH_LONG).show();
                 setProfileData();     // أظهر بيانات المستخدم بعد تسجيل الدخول
             }
         }
     }
+
 
     // أظهر بيانات المستخدم بعد تسجيل الدخول
     private void setProfileData() {
@@ -162,7 +166,7 @@ public class MainProductActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 // Got the download URL for 'users/me/profile.png'
-                Log.d("------", uri.toString());
+//                Log.d("------", uri.toString());
                 Glide.with(MainProductActivity.this /* context */)
                         .asBitmap()
                         .load(uri.toString())
@@ -183,7 +187,7 @@ public class MainProductActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
-                Log.d("-----", exception.getMessage());
+//                Log.d("-----", exception.getMessage());
             }
         });
 
@@ -194,12 +198,17 @@ public class MainProductActivity extends AppCompatActivity {
 
         hideBtnLogReg();
 
-        if (url_image.length() == 0){
-            String i = SessionSharedPreference.getImage(getApplicationContext());
-            if (i.length() > 0) {
-                user_image_view.setImageBitmap(decodeBase64(i));
+        if (url_image != null)
+            if (url_image.length() == 0) {
+                String i = SessionSharedPreference.getImage(getApplicationContext());
+                if (i.length() > 0) {
+                    user_image_view.setImageBitmap(decodeBase64(i));
+                }
             }
-        }
+
+        Menu menu = navigationView.getMenu();
+        MenuItem register = menu.findItem(R.id.nav_logout);
+        register.setVisible(true);
     }
 
     private void hideBtnLogReg() {
@@ -250,6 +259,10 @@ public class MainProductActivity extends AppCompatActivity {
     }
 
     public void logoutBtn(MenuItem item) {
+        loginSuccess = false;
+        SessionSharedPreference.setLoggedIn(getApplicationContext(), false, "", "");
+        SessionSharedPreference.setImageSherPref(getApplicationContext(), "");
+
         fab.hide();
         header = navigationView.getHeaderView(0);
 
@@ -267,7 +280,11 @@ public class MainProductActivity extends AppCompatActivity {
         labeled_v.setVisibility(View.VISIBLE);
         register_btn.setVisibility(View.VISIBLE);
 
-        SessionSharedPreference.setLoggedIn(getApplicationContext(), false, "", "");
-        SessionSharedPreference.setImageSherPref(getApplicationContext(), "");
+        Toast.makeText(getApplicationContext(), "Logout Done!", Toast.LENGTH_SHORT).show();
+
+        Menu menu = navigationView.getMenu();
+        MenuItem register = menu.findItem(R.id.nav_logout);
+        register.setVisible(false);
+
     }
 }
