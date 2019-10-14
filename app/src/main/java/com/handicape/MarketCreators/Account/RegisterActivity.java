@@ -238,7 +238,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             progressDialog.setMessage("Signing up...");
             progressDialog.show();
-            
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String, Object> product = new HashMap<>();
             product.put("name", user_name);

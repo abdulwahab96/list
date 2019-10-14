@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Text">
+        <item>وسيط المبدعين</item>
+        <item>اكبر سوق تجاري</item>
+        <item>لطاقات مبدعة</item>
+        <item>من ذوي الاحتياجات الخاصة</item>
+        <item>هدفنا خلق تواصل تجاري ميسر</item>
+        <item>بين هذه الفئة و المشتري</item>
+    </string-array>
+</resources>

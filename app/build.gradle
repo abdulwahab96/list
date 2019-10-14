@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.tomer:fadingtextview:1.8.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -12,10 +12,12 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/profile"
             android:title="@string/menu_profile" />
-<!--        <item-->
-<!--            android:id="@+id/nav_tools"-->
-<!--            android:icon="@drawable/ic_menu_manage"-->
-<!--            android:title="@string/menu_tools" />-->
+
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/menu_about" />
 
 
     </group>
