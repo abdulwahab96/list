@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,16 +94,23 @@ public class MainProductActivity extends AppCompatActivity {
 
     // هل المستخدم مسجل دخول من قبل لجلب بياناته
     private void checkSession() {
+        Menu menu = navigationView.getMenu();
+
         // Check if UserResponse is Already Logged In
         if (SessionSharedPreference.getLoggedStatus(getApplicationContext())) {
             // الزبون مسجل دخول مسبقا إجلب بياناته وإعرضها
             String n = SessionSharedPreference.getUserName(getApplicationContext());
             String e = SessionSharedPreference.getEmail(getApplicationContext());
-
+            String p = SessionSharedPreference.getEPaypal(getApplicationContext());
+            menu.findItem(R.id.nav_profile).setVisible(true);
             if (n.length() > 0 && e.length() > 0) {
                 User user = new User(n, e, "", true);
+                if (p.length() > 0)
+                    user.setE_paypal(p);
                 setProfileData();
             }
+        } else {
+            menu.findItem(R.id.nav_profile).setVisible(false);
         }
     }
 
@@ -206,8 +214,8 @@ public class MainProductActivity extends AppCompatActivity {
             }
 
         Menu menu = navigationView.getMenu();
-        MenuItem register = menu.findItem(R.id.nav_logout);
-        register.setVisible(true);
+        menu.findItem(R.id.nav_logout).setVisible(true);
+        menu.findItem(R.id.nav_profile).setVisible(true);
     }
 
     private void hideBtnLogReg() {
@@ -261,6 +269,8 @@ public class MainProductActivity extends AppCompatActivity {
         loginSuccess = false;
         SessionSharedPreference.setLoggedIn(getApplicationContext(), false, "", "");
         SessionSharedPreference.setImageSherPref(getApplicationContext(), "");
+        SessionSharedPreference.setEPaypal("",getApplicationContext());
+        User.setE_paypal("");
 
         fab.hide();
         header = navigationView.getHeaderView(0);
@@ -282,8 +292,7 @@ public class MainProductActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Logout Done!", Toast.LENGTH_SHORT).show();
 
         Menu menu = navigationView.getMenu();
-        MenuItem register = menu.findItem(R.id.nav_logout);
-        register.setVisible(false);
-
+        menu.findItem(R.id.nav_logout).setVisible(false);
+        menu.findItem(R.id.nav_profile).setVisible(false);
     }
 }

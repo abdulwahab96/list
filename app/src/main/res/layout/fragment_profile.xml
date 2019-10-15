@@ -98,18 +98,48 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/paypal_view_Linear">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:text="E-Paypal:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/e_paypal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:hint="example@paypal.com"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+        </LinearLayout>
+
         <Button
-            android:id="@+id/reg_btn"
+            android:id="@+id/add_paypal_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:background="@color/colorAccent"
             android:padding="10dp"
-            android:text="@string/pro_add"
+            android:text="Add paypal email"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="20sp"
-            android:visibility="gone" />
+            android:onClick="addEmailPaypal"/>
+
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ public class User {
     public static String name;
     public static String email;
     public static String url_image;
+    public static String e_paypal;
     public static boolean loginSuccess = false;
 
     public User() {
@@ -47,5 +48,13 @@ public class User {
 
     public void setLoginSuccess(boolean loginSuccess) {
         this.loginSuccess = loginSuccess;
+    }
+
+    public static String getE_paypal() {
+        return e_paypal;
+    }
+
+    public static void setE_paypal(String e_paypal) {
+        User.e_paypal = e_paypal;
     }
 }

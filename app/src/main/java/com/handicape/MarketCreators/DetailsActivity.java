@@ -43,6 +43,7 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
         setSupportActionBar(toolbar);
 
         p = (Product) getIntent().getSerializableExtra("MyClass");
+
         Glide.with(this /* context */)
                 .asBitmap()
                 .load(p.getUrl_image_product())
@@ -62,7 +63,13 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
 
 
         TextView product_details = (TextView) findViewById(R.id.product_details);
-        product_details.setText(getIntent().getStringExtra("product_details"));
+
+        String fullDetail = p.getDetails_product() + "\n"
+                + "Price: " +p.getPrice_product() + "\n"
+                + "Count available: " + p.getNumber_of_product() + "\n"
+                + "by: " + p.getName_owner_product() + "\n"
+                + "Address " + p.getAddress_owner_product() +"\n";
+        product_details.setText(fullDetail);// getIntent().getStringExtra("product_details")
 
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

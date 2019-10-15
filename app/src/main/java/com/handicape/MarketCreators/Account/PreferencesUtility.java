@@ -7,5 +7,6 @@ public class PreferencesUtility {
     public static final String USER_NAME = "user_name";
     public static final String EMAIL = "email";
     public static final String IMAGE = "image";
+    public static final String E_PAYPAL = "e_paypal";
 
 }

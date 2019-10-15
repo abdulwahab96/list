@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import static com.handicape.MarketCreators.Account.PreferencesUtility.EMAIL;
+import static com.handicape.MarketCreators.Account.PreferencesUtility.E_PAYPAL;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.IMAGE;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.LOGGED_IN_PREF;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.USER_NAME;
@@ -17,6 +18,7 @@ public class SessionSharedPreference {
 
     /**
      * Set the Login Status
+     *
      * @param context
      * @param loggedIn
      */
@@ -30,12 +32,13 @@ public class SessionSharedPreference {
 
     public static void setImageSherPref(Context context, String image) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
-        editor.putString(IMAGE,image);
+        editor.putString(IMAGE, image);
         editor.apply();
     }
 
     /**
      * Get the Login Status
+     *
      * @param context
      * @return boolean: login status
      */
@@ -44,7 +47,7 @@ public class SessionSharedPreference {
     }
 
     public static String getUserName(Context context) {
-        return getPreferences(context).getString(USER_NAME,"");
+        return getPreferences(context).getString(USER_NAME, "");
     }
 
     public static String getEmail(Context context) {
@@ -54,4 +57,17 @@ public class SessionSharedPreference {
     public static String getImage(Context context) {
         return getPreferences(context).getString(IMAGE, "");
     }
+
+    public static void setEPaypal(String E_Paypal, Context context) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putString(E_PAYPAL, E_Paypal);
+        editor.apply();
+
+    }
+    public static String getEPaypal(Context context) {
+        return getPreferences(context).getString(E_PAYPAL, "");
+    }
+
+
+
 }
