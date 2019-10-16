@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity"
+        <activity android:name=".Account.PaypalActivity"></activity>
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,13 +26,11 @@
         </activity>
         <activity
             android:name=".MainProductActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".Account.RegisterActivity" />
         <activity
             android:name=".Account.LoginActivity"
-            android:label="Sign in"></activity>
+            android:label="Sign in" />
         <activity
             android:name=".AddProductActivity"
             android:label="Add Product" />

@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.handicape.MarketCreators.Account.PaypalActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -108,5 +109,10 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
             intent.putExtra("MyClass", (Serializable) p);
             startActivity(intent);
         }
+    }
+
+    public void donate(View view) {
+        Intent intent = new Intent(DetailsActivity.this, PaypalActivity.class);
+        startActivity(intent);
     }
 }
