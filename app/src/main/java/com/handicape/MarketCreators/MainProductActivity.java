@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -141,6 +142,7 @@ public class MainProductActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+//        Toast.makeText(MainProductActivity.this, url_image, Toast.LENGTH_LONG).show();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView login_btn = header.findViewById(R.id.login_btn);
@@ -168,12 +170,15 @@ public class MainProductActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
+        if (url_image!=null){
+            url_image = SessionSharedPreference.getUrlImage(MainProductActivity.this);
+        }
         storageRef.child("users_images/" + url_image)
                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 // Got the download URL for 'users/me/profile.png'
-//                Log.d("------", uri.toString());
+                Log.d("------+++++", uri.toString());
                 Glide.with(MainProductActivity.this /* context */)
                         .asBitmap()
                         .load(uri.toString())
@@ -269,7 +274,8 @@ public class MainProductActivity extends AppCompatActivity {
         loginSuccess = false;
         SessionSharedPreference.setLoggedIn(getApplicationContext(), false, "", "");
         SessionSharedPreference.setImageSherPref(getApplicationContext(), "");
-        SessionSharedPreference.setEPaypal("",getApplicationContext());
+        SessionSharedPreference.setEPaypal("", getApplicationContext());
+        SessionSharedPreference.setUrlImage("", getApplicationContext());
         User.setE_paypal("");
 
         fab.hide();
@@ -296,3 +302,4 @@ public class MainProductActivity extends AppCompatActivity {
         menu.findItem(R.id.nav_profile).setVisible(false);
     }
 }
+

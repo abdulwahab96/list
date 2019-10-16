@@ -8,6 +8,7 @@ import static com.handicape.MarketCreators.Account.PreferencesUtility.EMAIL;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.E_PAYPAL;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.IMAGE;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.LOGGED_IN_PREF;
+import static com.handicape.MarketCreators.Account.PreferencesUtility.URL_IMAGE;
 import static com.handicape.MarketCreators.Account.PreferencesUtility.USER_NAME;
 
 public class SessionSharedPreference {
@@ -68,6 +69,14 @@ public class SessionSharedPreference {
         return getPreferences(context).getString(E_PAYPAL, "");
     }
 
+    public static void setUrlImage(String url_image, Context context) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putString(URL_IMAGE, url_image);
+        editor.apply();
 
+    }
+    public static String getUrlImage(Context context) {
+        return getPreferences(context).getString(URL_IMAGE, "");
+    }
 
 }

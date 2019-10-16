@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -52,6 +57,9 @@ public class RegisterActivity extends AppCompatActivity {
             user_name,
             user_pass,
             user_email;
+    private FirebaseAuth mAuth;
+    private static final String TAG = "RegisterActivity";
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
         ed_user_email = findViewById(R.id.user_registration_email);
         txt_have_acc = findViewById(R.id.have_account);
         user_img = (ImageView) findViewById(R.id.user_image);
-
+        progressDialog = new ProgressDialog(this);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     // عند الضعط على إنشاء حساب
@@ -88,143 +97,96 @@ public class RegisterActivity extends AppCompatActivity {
         user_pass = ed_user_pass.getText().toString();
         user_email = ed_user_email.getText().toString();
 
-        if (user_email.matches("^(.+)@(.+)$")) {
-
-            if (user_name.matches("[a-zA-Z0-9\\._\\-]{3,}")) {
-                if (!user_pass.isEmpty()) {
-
-//                    validEmailOnline(user_email);
-                    uploadData();
-
-                }
-               /* if (user_pass.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) {
-
-                } else {
-                    Toast.makeText(RegisterActivity.this, "8 char password!", Toast.LENGTH_SHORT).show();
-                }*/
-            } else {
-                Toast.makeText(RegisterActivity.this, "Invalid Username!", Toast.LENGTH_SHORT).show();
-            }
-
-        } else {
-            Toast.makeText(RegisterActivity.this, "Invalid Email!", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "createAccount:" + user_email);
+        if (!validateForm()) {
+            return;
         }
 
+        progressDialog.setMessage("Signing up...");
+        showProgressDialog();
 
-    }
-
-    // تحقق من أن الإيميل لم يسجل من قبل
-    private void validEmailOnline(final String user_email) {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Email verification is in progress...");
-        progressDialog.show();
-
-        final User[] user = new User[1];
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users")
-                .whereEqualTo("email", user_email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // [START create_user_with_email]
+        mAuth.createUserWithEmailAndPassword(user_email, user_pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                document.getId();
-                                user[0] = document.toObject(User.class);
-//                                Log.d("-----", document.getId() + " => " + user.getName());
-//                                User.loginSuccess=true;
-                                if (user[0] != null) {
-                                    Toast.makeText(RegisterActivity.this, "Sorry, the email is already registered!", Toast.LENGTH_LONG).show();
-                                    progressDialog.dismiss();
-                                    break;
-                                }
-                            }
-                            if (user[0] == null) {
-                                progressDialog.dismiss();
-//                                Toast.makeText(RegisterActivity.this, "ok...", Toast.LENGTH_LONG).show();
-                            }
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(user_name).build();
+                            user.updateProfile(profileUpdates);
+
+//                            Toast.makeText(RegisterActivity.this, "Create user success",
+//                                    Toast.LENGTH_SHORT).show();
+                            updateUI();
+                            uploadData();
 
 
                         } else {
-                            Log.d("-----", "Error getting documents: ", task.getException());
-                            progressDialog.dismiss();
-                            Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            String e = task.getException() + "";
+                            if (e.contains("use by another")) {
+                                e = e.substring(61, e.length());
+//                                Toast.makeText(RegisterActivity.this, e ,
+//                                        Toast.LENGTH_LONG).show();
+                                ed_user_email.setError(e);
+                            } else if (e.contains("password")) {
+                                e = e.substring(61, e.length());
+                                ed_user_pass.setError(e);
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Authentication failed." + e,
+                                        Toast.LENGTH_LONG).show();
+                            }
+//                            updateUI(null);
+                            hideProgressDialog();
                         }
-
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Error", Toast.LENGTH_LONG).show();
-
                     }
                 });
+    }
 
+    private void updateUI() {
+        User.loginSuccess = true;
+        User.email = user_email;
+        User.name = user_name;
+    }
 
+    private void hideProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    private void showProgressDialog() {
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
     }
 
     //إرفع البيانات إلى القاعدة
     private void uploadData() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if (photo_uri != null) {
-            progressDialog.setTitle("Signing up...");
-            progressDialog.show();
-
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference();
             imageName = UUID.randomUUID().toString();
-
             StorageReference ref = storageReference.child("users_images/" + imageName);
             ref.putFile(photo_uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                            Toast.makeText(RegisterActivity.this, "Uploaded Done", Toast.LENGTH_SHORT).show();
+                            User.url_image = imageName;
+                            SessionSharedPreference.setUrlImage(imageName,RegisterActivity.this);
+                            uploadInfo(db, true);
 
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String, Object> product = new HashMap<>();
-                            product.put("name", user_name);
-                            product.put("pass", user_pass);
-                            product.put("email", user_email);
-                            product.put("url_image", imageName);
-
-                            // Add a new document with a generated ID
-                            db.collection("users")
-                                    .add(product)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            Toast.makeText(RegisterActivity.this, "Register done!", Toast.LENGTH_SHORT).show();
-
-                                            User.loginSuccess = true;
-                                            User.email = user_email;
-                                            User.name = user_name;
-                                            User.url_image = imageName;
-
-                                            progressDialog.dismiss();
-                                            SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("TAG", "Error adding document", e);
-                                            progressDialog.dismiss();
-                                        }
-                                    });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(RegisterActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+                            Log.d(TAG,e.getMessage());
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -236,49 +198,43 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            progressDialog.setMessage("Signing up...");
-            progressDialog.show();
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Map<String, Object> product = new HashMap<>();
-            product.put("name", user_name);
-            product.put("pass", user_pass);
-            product.put("email", user_email);
-            product.put("url_image", imageName);
-
-            // Add a new document with a generated ID
-            db.collection("users")
-                    .add(product)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                            Toast.makeText(RegisterActivity.this, "Register done!", Toast.LENGTH_SHORT).show();
-                            User.loginSuccess = true;
-                            User.email = user_email;
-                            User.name = user_name;
-                            SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
-                            progressDialog.dismiss();
-                            finish();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("TAG", "Error adding document", e);
-                            progressDialog.dismiss();
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
-                    });
+            uploadInfo(db, false);
+            hideProgressDialog();
+            finish();
         }
 
+    }
+
+    void uploadInfo(FirebaseFirestore db, final boolean imageExists) {
+        Map<String, Object> product = new HashMap<>();
+        product.put("name", user_name);
+        product.put("pass", user_pass);
+        product.put("email", user_email);
+        product.put("url_image", imageName);
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .add(product)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(RegisterActivity.this, "Create user success!", Toast.LENGTH_SHORT).show();
+
+                        updateUI();
+                        SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
+
+                        hideProgressDialog();
+                        finish();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     // إختر صورة من الإستوديوا
@@ -319,10 +275,33 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void killActivity() {
-        Intent intent = new Intent(RegisterActivity.this, MainProductActivity.class);
-        startActivity(intent);
-        finish();
-    }
+    private boolean validateForm() {
+        boolean valid = true;
 
+        String email = ed_user_email.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            ed_user_email.setError("Required.");
+            valid = false;
+        } else {
+            ed_user_email.setError(null);
+        }
+
+        String password = ed_user_pass.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            ed_user_pass.setError("Required.");
+            valid = false;
+        } else {
+            ed_user_pass.setError(null);
+        }
+
+        String userName = ed_user_name.getText().toString();
+        if (TextUtils.isEmpty(userName)) {
+            ed_user_name.setError("Required.");
+            valid = false;
+        } else {
+            ed_user_name.setError(null);
+        }
+
+        return valid;
+    }
 }

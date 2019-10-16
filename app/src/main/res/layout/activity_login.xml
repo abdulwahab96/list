@@ -65,7 +65,8 @@
         android:padding="10dp"
         android:text="@string/forget_pass"
         android:textAllCaps="false"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:onClick="forgetPasswordBtn"/>
 
     <TextView
         android:id="@+id/new_acc"

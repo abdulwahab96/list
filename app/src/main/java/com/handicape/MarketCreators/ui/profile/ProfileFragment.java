@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
                             // Got the download URL for 'users/me/profile.png'
-                            Log.d("------", uri.toString());
+                            Log.d(" uri.toString", uri.toString());
                             Glide.with(getActivity().getApplicationContext())
                                     .asBitmap()
                                     .load(uri.toString())
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
-                            Log.d("-----", exception.getMessage());
+                            Log.d(" uri.toString", exception.getMessage());
                         }
                     });
                 }
