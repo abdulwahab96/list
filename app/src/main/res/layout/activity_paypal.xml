@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="cursive"
-        android:text=" Donation email is:"
+        android:text="@string/donation_email_is"
         android:textColor="#3578E5"
         android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"

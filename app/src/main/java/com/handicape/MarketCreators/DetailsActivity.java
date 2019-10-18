@@ -28,7 +28,7 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
 
     static Toolbar toolbar;
     Product p;
-    boolean imageُxists = false;
+    boolean imagexists = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
         TextView titleTv = (TextView)findViewById(R.id.title);
         titleTv.setText(getIntent().getStringExtra("product_name"));
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,7 +54,7 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         toolbarLayout.setBackground(new BitmapDrawable(getResources(), resource));
                         if (toolbarLayout.getBackground() != null) {
-                            imageُxists = true;
+                            imagexists = true;
                         }
                     }
 
@@ -66,10 +67,10 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
         TextView product_details = (TextView) findViewById(R.id.product_details);
 
         String fullDetail = p.getDetails_product() + "\n"
-                + "Price: " +p.getPrice_product() + "\n"
-                + "Count available: " + p.getNumber_of_product() + "\n"
-                + "by: " + p.getName_owner_product() + "\n"
-                + "Address " + p.getAddress_owner_product() +"\n";
+                + getString(R.string.price_view) + " " +p.getPrice_product() + "\n"
+                + getString(R.string.count_available) + " " + p.getNumber_of_product() + "\n"
+                + getString(R.string.by) + " " + p.getName_owner_product() + "\n"
+                + getString(R.string.address_view) + " " + p.getAddress_owner_product() +"\n";
         product_details.setText(fullDetail);// getIntent().getStringExtra("product_details")
 
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,14 +98,14 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void openImage(View view) {
-        if (imageُxists) {
+        if (imagexists) {
             Intent intent = new Intent(DetailsActivity.this, OpenImageActivity.class);
             intent.putExtra("MyClass", (Serializable) p);
             startActivity(intent);

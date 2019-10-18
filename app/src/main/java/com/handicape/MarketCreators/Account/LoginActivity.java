@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void getUrlImage(String email) {
+    private void getUrlImage(String email, final ProgressDialog progressDialog) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereEqualTo("email", email )
@@ -98,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String urlImage =  document.toObject(User.class).getUrl_image();
                                 SessionSharedPreference.setUrlImage(urlImage,LoginActivity.this);
                                 url_image = SessionSharedPreference.getUrlImage(LoginActivity.this);
-                                Toast.makeText(LoginActivity.this, User.url_image , Toast.LENGTH_LONG).show();
+//                                Toast.makeText(LoginActivity.this, User.url_image , Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
                                 finish();
                             }
                         }
@@ -122,8 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            getUrlImage(email);
-                            progressDialog.dismiss();
+                            getUrlImage(email,progressDialog);
+
 //                            finish();
                         } else {
                             // If sign in fails, display a message to the user.

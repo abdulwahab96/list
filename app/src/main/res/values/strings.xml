@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Market Creators</string>
+    <string name="app_name">سوق المبدعين</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -89,27 +89,69 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">الإعدادات</string>
 
-    <string name="user">User name:</string>
-    <string name="pass">Password:</string>
-    <string name="login_btn">Login</string>
-    <string name="new_acc">Register new user...</string>
-    <string name="forget_pass">Forget password</string>
-    <string name="email">Email:</string>
-    <string name="reg_btn">Register</string>
-    <string name="allready_acc">have an account ?</string>
-    <string name="pro_add">Add Product</string>
-    <string name="title_activity_main_product">MainProductActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
+    <string name="user">إسمك:</string>
+    <string name="pass">كلمة السر:</string>
+    <string name="login_btn">تسجيل الدخول</string>
+    <string name="new_acc">تسجيل مستخدم جديد...</string>
+    <string name="forget_pass">نسيت كلمة السر!</string>
+    <string name="email">الإيميل:</string>
+    <string name="reg_btn">إنشاء حساب</string>
+    <string name="allready_acc">هل لديك حساب بالفعل؟</string>
+    <string name="pro_add">إضافة منتج جديد</string>
+    <string name="title_activity_main_product">قائمة المنتجات</string>
+    <string name="navigation_drawer_open">فتح القائمة الجانبية</string>
+    <string name="navigation_drawer_close">إغلاق القائمة الجانبية</string>
+    <string name="nav_header_title">العنوان</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_profile">Profile</string>
-    <string name="menu_about">About</string>
-    <string name="menu_logout">Logout</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_home">الصفحة الرئيسية</string>
+    <string name="menu_profile">الصفحة الشخصية</string>
+    <string name="menu_about">حول</string>
+    <string name="menu_logout">تسجيل خروج</string>
+    <string name="menu_share">مشاركة</string>
+    <string name="action_delete">حذف</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="register">إنشاء حساب</string>
+    <string name="title">العنوان</string>
+    <string name="buy">شراء</string>
+    <string name="donate">تبرع</string>
+    <string name="e_paypal">البريد الإلكتروني لباي بال:</string>
+    <string name="add_paypal_email">أضف البريد الإلكتروني لباي بال</string>
+    <string name="upload_product_image">أضف صورة المنتج</string>
+    <string name="skip">تخطي</string>
+    <string name="empty_list">لايوجد منتجات حاليا!</string>
+    <string name="your_ability">قدرتك</string>
+    <string name="surpasses">تفوق</string>
+    <string name="the_impossible">المستحيل</string>
+    <string name="Market">سوق</string>
+    <string name="yes">نعم</string>
+    <string name="you_can">تستطيع</string>
+    <string name="creators">المبدعين</string>
+    <string name="logout_done">تم تسجيل الخروج!</string>
+    <string name="uploaded_done">تم رفع الصورة بنجاح</string>
+    <string name="done">تم</string>
+    <string name="failed">فشل</string>
+    <string name="add_paypal_email_done">تم إضافة البريد الإلكتروني لباي بال!</string>
+    <string name="add_paypal_email_faild">فشل في إضافة البريد الإلكتروني لباي بال!</string>
+    <string name="register_faild">فشل إنشاء حساب</string>
+    <string name="password">       كلمة السر</string>
+    <string name="product_name">إسم المنتج</string>
+    <string name="product_details">وصف المنتج</string>
+    <string name="price">سعر المنتج $</string>
+    <string name="availability">عدد القطع المتوفرة من المنتج</string>
+    <string name="your_name">إسمك</string>
+    <string name="address">عنوانك</string>
+    <string name="add_product">إضافة منتج</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="input_e_paypal">:أدخل بريد باي بال</string>
+    <string name="ok">تم</string>
+    <string name="cancel">إلغاء</string>
+    <string name="price_view">السعر: $ </string>
+    <string name="count_available">عدد القطع المتوفرة: </string>
+    <string name="by">صاحب المنتج: </string>
+    <string name="address_view">العنوان: </string>
+    <string name="donation_email_is">ايميل التبرع هو:</string>
 </resources>

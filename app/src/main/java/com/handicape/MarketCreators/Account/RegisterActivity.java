@@ -232,7 +232,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RegisterActivity.this, "Register Faild", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_faild), Toast.LENGTH_LONG).show();
                     }
                 });
     }

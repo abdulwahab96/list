@@ -2,6 +2,8 @@ package com.handicape.MarketCreators.Account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +23,8 @@ public class PaypalActivity extends AppCompatActivity {
     }
 
     public void Pay_pal(View view) {
+        Intent Pay_pal =new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/sa/home"));
+        startActivities(new Intent[]{Pay_pal});
 
     }
 }

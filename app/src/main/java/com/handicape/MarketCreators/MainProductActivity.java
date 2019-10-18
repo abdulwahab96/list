@@ -16,13 +16,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -60,6 +63,7 @@ public class MainProductActivity extends AppCompatActivity {
     View header;
     FloatingActionButton fab;
     DrawerLayout drawer;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,9 @@ public class MainProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_product);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +93,7 @@ public class MainProductActivity extends AppCompatActivity {
                 R.id.nav_about, R.id.nav_share)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -152,6 +159,8 @@ public class MainProductActivity extends AppCompatActivity {
             if (loginSuccess) {
 //                Toast.makeText(MainProductActivity.this, loginSuccess + "onResume", Toast.LENGTH_LONG).show();
                 setProfileData();     // أظهر بيانات المستخدم بعد تسجيل الدخول
+                MenuItem itemq = findViewById(R.id.action_delete);
+                itemq.setVisible(true);
             }
         }
     }
@@ -249,7 +258,19 @@ public class MainProductActivity extends AppCompatActivity {
        /* FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.show(new ProfileFragment());
         transaction.commit();*/
+       if (loginSuccess) {
+           setGraphView(R.id.nav_profile);
+       }
+
     }
+    void setGraphView(int id){
+        NavGraph graph = navController.getNavInflater().inflate(R.navigation.mobile_navigation);
+        graph.setStartDestination(id);
+        navController.setGraph(graph);
+        drawer.closeDrawer(Gravity.RIGHT);
+
+    }
+
 
     // method for bitmap to base64
     public static String encodeTobase64(Bitmap image) {
@@ -295,11 +316,20 @@ public class MainProductActivity extends AppCompatActivity {
         labeled_v.setVisibility(View.VISIBLE);
         register_btn.setVisibility(View.VISIBLE);
 
-        Toast.makeText(getApplicationContext(), "Logout Done!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.logout_done), Toast.LENGTH_SHORT).show();
 
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_logout).setVisible(false);
         menu.findItem(R.id.nav_profile).setVisible(false);
+
+        final ImageView user_image_view = header.findViewById(R.id.profile_image);
+        user_image_view.setImageResource(R.mipmap.ic_launcher_round);
+
+        // if profile fragment open close it
+        setGraphView(R.id.nav_home);
+
+        MenuItem itemq = findViewById(R.id.action_delete);
+        itemq.setVisible(false);
     }
 }
 

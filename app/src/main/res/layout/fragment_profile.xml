@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:padding="10dp"
-                android:text="E-Paypal:"
+                android:text="@string/e_paypal"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>
@@ -133,7 +133,7 @@
             android:layout_marginTop="30dp"
             android:background="@color/colorAccent"
             android:padding="10dp"
-            android:text="Add paypal email"
+            android:text="@string/add_paypal_email"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="20sp"

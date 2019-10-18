@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:text="Title"
+        android:text="@string/title"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
         android:textStyle="bold"
@@ -65,14 +65,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Buy" />
+            android:text="@string/buy"
+            android:textColor="#fff"
+            android:background="@android:color/holo_blue_light"
+            android:layout_margin="8dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="donate"
-            android:onClick="donate"/>
+            android:text="@string/donate"
+            android:onClick="donate"
+            android:textColor="#fff"
+            android:background="@android:color/holo_blue_light"
+            android:layout_margin="8dp"/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

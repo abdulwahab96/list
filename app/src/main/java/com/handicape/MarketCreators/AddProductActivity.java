@@ -53,6 +53,7 @@ public class AddProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
         Button upload = (Button) findViewById(R.id.upload);
         img = (ImageView) findViewById(R.id.gallery);
@@ -126,7 +127,7 @@ public class AddProductActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(AddProductActivity.this, "Uploaded Done", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddProductActivity.this, getString(R.string.uploaded_done), Toast.LENGTH_SHORT).show();
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             Map<String, Object> product = new HashMap<>();
@@ -145,7 +146,7 @@ public class AddProductActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            Toast.makeText(AddProductActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AddProductActivity.this, getString(R.string.done), Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -161,7 +162,7 @@ public class AddProductActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(AddProductActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddProductActivity.this, getString(R.string.failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {

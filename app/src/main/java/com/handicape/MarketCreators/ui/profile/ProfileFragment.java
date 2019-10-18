@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment {
                         public void onSuccess(Uri uri) {
                             // Got the download URL for 'users/me/profile.png'
                             Log.d(" uri.toString", uri.toString());
-                            Glide.with(getActivity().getApplicationContext())
+                            Glide.with(getContext())
                                     .asBitmap()
                                     .load(uri.toString())
                                     .into(new CustomTarget<Bitmap>() {
@@ -127,7 +127,7 @@ public class ProfileFragment extends Fragment {
     public void addEmailPaypal(final View root) {
         final String[] m_Text = {""};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Input E-Paypal:");
+        builder.setTitle(getResources().getString(R.string.input_e_paypal));
 
         // Set up the input
         final EditText input = new EditText(getContext());
@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
         builder.setView(input);
 
 // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text[0] = input.getText().toString(); // paypal email
@@ -146,7 +146,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment {
                                     db.collection("users").document(document.getId()).update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(getContext(), "Add paypal email done!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), getString(R.string.add_paypal_email_done), Toast.LENGTH_SHORT).show();
                                             // افة إلى بيانات الجلسة أوفلاين
                                             SessionSharedPreference.setEPaypal(s, getContext());
                                             User.setE_paypal(s);
@@ -197,7 +197,7 @@ public class ProfileFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Add paypal email faild", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.add_paypal_email_faild), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 });

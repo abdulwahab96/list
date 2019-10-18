@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:background="#EEEEEE"
-            android:hint="           Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textAlignment="center"/>
     </com.google.android.material.textfield.TextInputLayout>
