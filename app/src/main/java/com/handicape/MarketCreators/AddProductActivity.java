@@ -116,7 +116,7 @@ public class AddProductActivity extends AppCompatActivity {
 
         if (photo_uri != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle(getResources().getString(R.string.upload_product));
             progressDialog.show();
 
             imageName = UUID.randomUUID().toString();
@@ -147,6 +147,8 @@ public class AddProductActivity extends AppCompatActivity {
                                         public void onSuccess(DocumentReference documentReference) {
                                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
                                             Toast.makeText(AddProductActivity.this, getString(R.string.done), Toast.LENGTH_SHORT).show();
+
+                                            MainProductActivity.setGraphView(R.id.nav_home);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -170,7 +172,7 @@ public class AddProductActivity extends AppCompatActivity {
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                            progressDialog.setMessage(getResources().getString(R.string.progress) + (int) progress + "%");
                         }
                     });
         }

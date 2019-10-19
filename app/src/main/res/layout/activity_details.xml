@@ -68,7 +68,8 @@
             android:text="@string/buy"
             android:textColor="#fff"
             android:background="@android:color/holo_blue_light"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:onClick="buyProduct"/>
 
         <Button
             android:layout_width="wrap_content"

@@ -41,6 +41,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.Menu;
 import android.widget.Button;
@@ -62,8 +63,8 @@ public class MainProductActivity extends AppCompatActivity {
     NavigationView navigationView;
     View header;
     FloatingActionButton fab;
-    DrawerLayout drawer;
-    NavController navController;
+    static DrawerLayout drawer;
+    static NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,7 @@ public class MainProductActivity extends AppCompatActivity {
                 User user = new User(n, e, "", true);
                 if (p.length() > 0)
                     user.setE_paypal(p);
+                Log.d("paypal",p);
                 setProfileData();
             }
         } else {
@@ -159,8 +161,12 @@ public class MainProductActivity extends AppCompatActivity {
             if (loginSuccess) {
 //                Toast.makeText(MainProductActivity.this, loginSuccess + "onResume", Toast.LENGTH_LONG).show();
                 setProfileData();     // أظهر بيانات المستخدم بعد تسجيل الدخول
-                MenuItem itemq = findViewById(R.id.action_delete);
-                itemq.setVisible(true);
+                String p = SessionSharedPreference.getEPaypal(getApplicationContext());
+                    if (p.length() > 0)
+                        User.setE_paypal(p);
+                    Log.d("paypal",p);
+                /*MenuItem itemq = findViewById(R.id.action_delete);
+                itemq.setVisible(true);*/
             }
         }
     }
@@ -263,7 +269,8 @@ public class MainProductActivity extends AppCompatActivity {
        }
 
     }
-    void setGraphView(int id){
+
+    public static void setGraphView(int id){
         NavGraph graph = navController.getNavInflater().inflate(R.navigation.mobile_navigation);
         graph.setStartDestination(id);
         navController.setGraph(graph);
@@ -328,8 +335,8 @@ public class MainProductActivity extends AppCompatActivity {
         // if profile fragment open close it
         setGraphView(R.id.nav_home);
 
-        MenuItem itemq = findViewById(R.id.action_delete);
-        itemq.setVisible(false);
+        /*MenuItem itemq = findViewById(R.id.action_delete);
+        itemq.setVisible(false);*/
     }
 }
 

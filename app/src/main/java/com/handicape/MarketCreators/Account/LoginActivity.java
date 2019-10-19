@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
         init(); // Initializing
 
         // إذا لم يكن لديك حساب إنتقل إلى واجهة التسجيل
@@ -98,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                 String urlImage =  document.toObject(User.class).getUrl_image();
                                 SessionSharedPreference.setUrlImage(urlImage,LoginActivity.this);
                                 url_image = SessionSharedPreference.getUrlImage(LoginActivity.this);
+                                SessionSharedPreference.setEPaypal(document.getString("e_paypal"),LoginActivity.this);
 //                                Toast.makeText(LoginActivity.this, User.url_image , Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                                 finish();
@@ -111,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     private void validData(final String email, String pass) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Logging in...");
+        progressDialog.setMessage(getResources().getString(R.string.logging_in));
         progressDialog.show();
 
         mAuth.signInWithEmailAndPassword(email, pass)
@@ -129,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, getResources().getString(R.string.authentication_failed),
                                     Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                             progressDialog.dismiss();
@@ -146,11 +149,6 @@ public class LoginActivity extends AppCompatActivity {
         User.name = user.getDisplayName();
         SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);
     }
-
-
-
-
-
 
     public void forgetPasswordBtn(View view) {
         final String[] m_Text = {""};

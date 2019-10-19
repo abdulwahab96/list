@@ -66,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
         init(); // Initializing
 
         // عند الضغط على لدي حساب بالفعل
@@ -102,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.setMessage("Signing up...");
+        progressDialog.setMessage(getResources().getString(R.string.signing_up));
         showProgressDialog();
 
         // [START create_user_with_email]
@@ -132,10 +134,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 e = e.substring(61, e.length());
 //                                Toast.makeText(RegisterActivity.this, e ,
 //                                        Toast.LENGTH_LONG).show();
-                                ed_user_email.setError(e);
+                                ed_user_email.setError(getResources().getString(R.string.email_already_used));
                             } else if (e.contains("password")) {
                                 e = e.substring(61, e.length());
-                                ed_user_pass.setError(e);
+                                ed_user_pass.setError(getResources().getString(R.string.wroung_input_password));
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Authentication failed." + e,
                                         Toast.LENGTH_LONG).show();
@@ -185,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, getResources().getString(R.string.failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
                             Log.d(TAG,e.getMessage());
                         }
                     })
@@ -194,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                            progressDialog.setMessage(getResources().getString(R.string.uploaded) + (int) progress + "%");
                         }
                     });
         } else {
@@ -219,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                        Toast.makeText(RegisterActivity.this, "Create user success!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.create_user_success), Toast.LENGTH_SHORT).show();
 
                         updateUI();
                         SessionSharedPreference.setLoggedIn(getApplicationContext(), true, User.name, User.email);

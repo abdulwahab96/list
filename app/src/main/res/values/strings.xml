@@ -91,12 +91,12 @@
     </string>
     <string name="action_settings">الإعدادات</string>
 
-    <string name="user">إسمك:</string>
-    <string name="pass">كلمة السر:</string>
+    <string name="user">إسمك</string>
+    <string name="pass">كلمة السر</string>
     <string name="login_btn">تسجيل الدخول</string>
     <string name="new_acc">تسجيل مستخدم جديد...</string>
     <string name="forget_pass">نسيت كلمة السر!</string>
-    <string name="email">الإيميل:</string>
+    <string name="email">البريد الإلكتروني</string>
     <string name="reg_btn">إنشاء حساب</string>
     <string name="allready_acc">هل لديك حساب بالفعل؟</string>
     <string name="pro_add">إضافة منتج جديد</string>
@@ -133,11 +133,11 @@
     <string name="logout_done">تم تسجيل الخروج!</string>
     <string name="uploaded_done">تم رفع الصورة بنجاح</string>
     <string name="done">تم</string>
-    <string name="failed">فشل</string>
+    <string name="failed">حدث خطأ</string>
     <string name="add_paypal_email_done">تم إضافة البريد الإلكتروني لباي بال!</string>
     <string name="add_paypal_email_faild">فشل في إضافة البريد الإلكتروني لباي بال!</string>
     <string name="register_faild">فشل إنشاء حساب</string>
-    <string name="password">       كلمة السر</string>
+    <string name="password">كلمة السر</string>
     <string name="product_name">إسم المنتج</string>
     <string name="product_details">وصف المنتج</string>
     <string name="price">سعر المنتج $</string>
@@ -148,10 +148,22 @@
     <string name="sign_in">تسجيل الدخول</string>
     <string name="input_e_paypal">:أدخل بريد باي بال</string>
     <string name="ok">تم</string>
+    <string name="alright">حسنا</string>
     <string name="cancel">إلغاء</string>
     <string name="price_view">السعر: $ </string>
     <string name="count_available">عدد القطع المتوفرة: </string>
     <string name="by">صاحب المنتج: </string>
     <string name="address_view">العنوان: </string>
     <string name="donation_email_is">ايميل التبرع هو:</string>
+    <string name="sign_out">خروج</string>
+    <string name="logging_in">جاري التحقق من البيانات</string>
+    <string name="authentication_failed">خطأ في التحقق!</string>
+    <string name="add_p_email">جاري إضافة البريد الإلكتروني باي بال...</string>
+    <string name="signing_up">جاري إنشاء حساب...</string>
+    <string name="wroung_input_password">كلمة المرور المقدمة غير صالحة. [يجب ألا تقل كلمة المرور عن 6 أحرف]</string>
+    <string name="email_already_used">عنوان البريد الإلكتروني قيد الاستخدام بالفعل من قبل حساب آخر.</string>
+    <string name="create_user_success">تم إنشاء الحساب بنجاح!</string>
+    <string name="uploaded">جاري التسجيل ..</string>
+    <string name="upload_product">جاري إضافة المنتج..</string>
+    <string name="progress">تم التقدم ..</string>
 </resources>

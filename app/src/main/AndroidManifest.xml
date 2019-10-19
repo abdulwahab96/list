@@ -31,7 +31,8 @@
             android:name=".MainProductActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Account.RegisterActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:label="@string/register"/>
         <activity
             android:name=".Account.LoginActivity"
             android:label="@string/sign_in"

@@ -24,8 +24,8 @@
 
         <Button
             android:id="@+id/twi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="77dp"
+            android:layout_height="77dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="58dp"
@@ -34,8 +34,8 @@
 
         <Button
             android:id="@+id/face"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignTop="@+id/twi"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="58dp"

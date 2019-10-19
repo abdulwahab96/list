@@ -1,7 +1,10 @@
 package com.handicape.MarketCreators;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.database.collection.LLRBNode;
 import com.handicape.MarketCreators.Account.PaypalActivity;
 
 import androidx.annotation.NonNull;
@@ -17,9 +21,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -115,5 +122,30 @@ public class DetailsActivity extends AppCompatActivity implements Serializable {
     public void donate(View view) {
         Intent intent = new Intent(DetailsActivity.this, PaypalActivity.class);
         startActivity(intent);
+    }
+
+    public void buyProduct(View view) {
+        // نتشرف بزيارتك لنا على العنوان التالي:
+        final String[] m_Text = {""};
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetailsActivity.this);
+
+        // Set up the input
+        final TextView tv = new TextView(DetailsActivity.this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        tv.setText("نتشرف بزيارتك لنا على العنوان التالي:" + "\n" + p.getAddress_owner_product());
+        tv.setGravity(Gravity.RIGHT);
+        tv.setTextSize(16);
+        tv.setTextColor(Color.BLACK);
+        tv.setPadding(16,16,16,16);
+        builder.setView(tv);
+
+        builder.setNegativeButton(getResources().getString(R.string.alright), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }

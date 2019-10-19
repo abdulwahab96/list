@@ -3,6 +3,7 @@ package com.handicape.MarketCreators.ui.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,16 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.handicape.MarketCreators.DetailsActivity;
+import com.handicape.MarketCreators.MainProductActivity;
 import com.handicape.MarketCreators.Product;
 import com.handicape.MarketCreators.ProductAdapter;
 import com.handicape.MarketCreators.R;
@@ -75,6 +81,15 @@ public class HomeFragment extends Fragment implements Serializable {
         productListView.setAdapter(mAdapter);
 
         initDatabsae();
+
+        final SwipeRefreshLayout pullToRefresh = root.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainProductActivity.setGraphView(R.id.nav_home); // your code
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
         return root;
     }

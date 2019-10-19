@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment {
 
     private void addToDatabase(final String s, final View root) {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Add paypal email...");
+        progressDialog.setMessage(getResources().getString(R.string.add_p_email));
         progressDialog.show();
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
