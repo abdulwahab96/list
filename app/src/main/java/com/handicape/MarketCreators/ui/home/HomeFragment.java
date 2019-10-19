@@ -1,9 +1,9 @@
 package com.handicape.MarketCreators.ui.home;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +12,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +27,6 @@ import com.handicape.MarketCreators.MainProductActivity;
 import com.handicape.MarketCreators.Product;
 import com.handicape.MarketCreators.ProductAdapter;
 import com.handicape.MarketCreators.R;
-import com.handicape.MarketCreators.ui.profile.ProfileFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,7 +71,7 @@ public class HomeFragment extends Fragment implements Serializable {
         mAdapter = new ProductAdapter(getActivity().getBaseContext(), products);
         productListView.setAdapter(mAdapter);
 
-        initDatabsae();
+        initDatabase(root);
 
         final SwipeRefreshLayout pullToRefresh = root.findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,10 +82,19 @@ public class HomeFragment extends Fragment implements Serializable {
             }
         });
 
+        mAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                hideText(root);
+
+            }
+        });
+
         return root;
     }
 
-    private void initDatabsae() {
+    private void initDatabase(final View root) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("products")
                 .get()
@@ -105,42 +105,54 @@ public class HomeFragment extends Fragment implements Serializable {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
 
-                                Product pojo = new Product(document.getString("name"),
+                                Product pojo = new Product(document.getId(),
+                                        document.getString("name"),
                                         document.getString("price"),
                                         document.getString("number_of_pieces"),
                                         document.getString("name_owner"),
                                         document.getString("address_owner"),
                                         document.getString("details_product"),
-                                        document.getString("url_image")
+                                        document.getString("url_image"),
+                                        document.getString("email_owner")
                                 );
                                 products.add(pojo);
                                 mAdapter.notifyDataSetChanged();
-                                hide_progress();
+                                hide_progress(root);
+                            }
+                            if (products.isEmpty()) {
+                                showText(root);
+                                hide_progress(root);
                             }
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
-                            showText();
-
+                            hide_progress(root);
+                            if (products.isEmpty()) {
+                                showText(root);
+                            }
                         }
                     }
 
                 });
-
     }
 
-    private void hide_progress() {
+
+    private void hide_progress(View root) {
         try {
-            ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.loading_indicator);
+            ProgressBar progressBar = root.findViewById(R.id.loading_indicator);
             progressBar.setVisibility(View.INVISIBLE);
         } catch (NullPointerException e) {
 
         }
     }
 
-    private void showText() {
-        hide_progress();
-        TextView empty_text = (TextView) getView().findViewById(R.id.empty_view);
+    private void showText(View root) {
+        TextView empty_text = root.findViewById(R.id.empty_view);
         empty_text.setVisibility(View.VISIBLE);
+    }
+
+    private void hideText(View root) {
+        TextView empty_text = root.findViewById(R.id.empty_view);
+        empty_text.setVisibility(View.GONE);
     }
 
 }

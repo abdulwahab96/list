@@ -166,4 +166,9 @@
     <string name="uploaded">جاري التسجيل ..</string>
     <string name="upload_product">جاري إضافة المنتج..</string>
     <string name="progress">تم التقدم ..</string>
+    <string name="confirm_delete_prod">هل تود حذف هذا المنتج نهائيا؟</string>
+    <string name="progress_delete">جاري الحذف..</string>
+    <string name="delete_done">تم حذف المنتج بنجاح!</string>
+    <string name="done_add_product">تم إضافة المنتج بنجاح</string>
+    <string name="success_delete_prod">تم حذف المنتج بنجاح</string>
 </resources>

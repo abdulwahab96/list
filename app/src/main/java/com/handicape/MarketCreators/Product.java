@@ -3,6 +3,7 @@ package com.handicape.MarketCreators;
 import java.io.Serializable;
 
 public class Product implements Serializable{
+    private String id_product;
     private String name_product;
     private String price_product;
     private String number_of_product;
@@ -10,10 +11,14 @@ public class Product implements Serializable{
     private String address_owner_product;
     private String details_product;
     private String url_image_product;
+    private String email_owner;
 
-    public Product(String name_product, String price_product, String number_of_product,
-                   String name_owner_product, String address_owner_product, String details_product
-            , String url_image_product) {
+    public Product(String id_product,String name_product, String price_product,
+                   String number_of_product, String name_owner_product,
+                   String address_owner_product, String details_product
+            , String url_image_product, String email_owner) {
+
+        this.id_product = id_product;
         this.name_product = name_product;
         this.price_product = price_product;
         this.number_of_product = number_of_product;
@@ -21,6 +26,15 @@ public class Product implements Serializable{
         this.address_owner_product = address_owner_product;
         this.details_product = details_product;
         this.url_image_product = url_image_product;
+        this.email_owner = email_owner;
+    }
+
+    public String getEmail_owner() {
+        return email_owner;
+    }
+
+    public String getId_product() {
+        return id_product;
     }
 
     public String getName_product() {

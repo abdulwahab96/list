@@ -19,11 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:onClick="openImage"
+            android:scaleType="centerCrop"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="enterAlways"
-            app:toolbarId="@+id/toolbar"
-            android:onClick="openImage"
-            android:scaleType="centerCrop">
+            app:toolbarId="@+id/toolbar">
 
 
             <androidx.appcompat.widget.Toolbar
@@ -41,16 +41,15 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_margin="@dimen/fab_margin"
         android:text="@string/title"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:layout_gravity="end"
-        app:layout_anchor="@id/product_details"/>
+        app:layout_anchor="@id/product_details" />
 
     <include layout="@layout/content_scrolling" />
-
 
 
     <LinearLayout
@@ -58,28 +57,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
 
         <Button
+            android:id="@+id/buy_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_weight="1"
+            android:background="@android:color/holo_blue_light"
+            android:drawableLeft="@drawable/buy"
+            android:onClick="buyProduct"
             android:text="@string/buy"
             android:textColor="#fff"
-            android:background="@android:color/holo_blue_light"
-            android:layout_margin="8dp"
-            android:onClick="buyProduct"/>
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
+
 
         <Button
+            android:id="@+id/donate_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="@string/donate"
-            android:onClick="donate"
-            android:textColor="#fff"
             android:background="@android:color/holo_blue_light"
-            android:layout_margin="8dp"/>
+            android:onClick="donate"
+            android:text="@string/donate"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/donate"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
+
+        <Button
+            android:id="@+id/delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_light"
+            android:onClick="deleteProductByOwner"
+            android:text="@string/action_delete"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/trash"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

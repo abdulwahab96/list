@@ -65,6 +65,7 @@ public class MainProductActivity extends AppCompatActivity {
     FloatingActionButton fab;
     static DrawerLayout drawer;
     static NavController navController;
+    public static boolean FLAG_MUST_REFRESH_LIST = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class MainProductActivity extends AppCompatActivity {
                 User user = new User(n, e, "", true);
                 if (p.length() > 0)
                     user.setE_paypal(p);
-                Log.d("paypal",p);
+                Log.d("paypal", p);
                 setProfileData();
             }
         } else {
@@ -162,12 +163,17 @@ public class MainProductActivity extends AppCompatActivity {
 //                Toast.makeText(MainProductActivity.this, loginSuccess + "onResume", Toast.LENGTH_LONG).show();
                 setProfileData();     // أظهر بيانات المستخدم بعد تسجيل الدخول
                 String p = SessionSharedPreference.getEPaypal(getApplicationContext());
-                    if (p.length() > 0)
-                        User.setE_paypal(p);
-                    Log.d("paypal",p);
+                if (p.length() > 0)
+                    User.setE_paypal(p);
+                Log.d("paypal", p);
                 /*MenuItem itemq = findViewById(R.id.action_delete);
                 itemq.setVisible(true);*/
             }
+        }
+
+        if (FLAG_MUST_REFRESH_LIST) {
+            setGraphView(R.id.nav_home);
+            FLAG_MUST_REFRESH_LIST = false;
         }
     }
 
@@ -185,7 +191,7 @@ public class MainProductActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        if (url_image!=null){
+        if (url_image != null) {
             url_image = SessionSharedPreference.getUrlImage(MainProductActivity.this);
         }
         storageRef.child("users_images/" + url_image)
@@ -264,13 +270,13 @@ public class MainProductActivity extends AppCompatActivity {
        /* FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.show(new ProfileFragment());
         transaction.commit();*/
-       if (loginSuccess) {
-           setGraphView(R.id.nav_profile);
-       }
+        if (loginSuccess) {
+            setGraphView(R.id.nav_profile);
+        }
 
     }
 
-    public static void setGraphView(int id){
+    public static void setGraphView(int id) {
         NavGraph graph = navController.getNavInflater().inflate(R.navigation.mobile_navigation);
         graph.setStartDestination(id);
         navController.setGraph(graph);

@@ -7,4 +7,9 @@
         android:icon="@drawable/done"
         android:title="Done"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/skip"
+        android:title="@string/skip"
+        app:showAsAction="always" />
 </menu>

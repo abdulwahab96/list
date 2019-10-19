@@ -27,6 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.handicape.MarketCreators.Account.User;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -102,12 +103,6 @@ public class AddProductActivity extends AppCompatActivity {
         }
     }
 
-
-    // الإنتقال إلى أكتيفيتي عرض قائمة المنتجات
-    public void openListProduct(View view) {
-        finish();
-    }
-
     // إرفع البيانات إلى القاعدة
     private synchronized void uploadData() {
 
@@ -117,6 +112,7 @@ public class AddProductActivity extends AppCompatActivity {
         if (photo_uri != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle(getResources().getString(R.string.upload_product));
+            progressDialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             progressDialog.show();
 
             imageName = UUID.randomUUID().toString();
@@ -127,7 +123,7 @@ public class AddProductActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(AddProductActivity.this, getString(R.string.uploaded_done), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(AddProductActivity.this, getString(R.string.uploaded_done), Toast.LENGTH_SHORT).show();
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             Map<String, Object> product = new HashMap<>();
@@ -138,6 +134,7 @@ public class AddProductActivity extends AppCompatActivity {
                             product.put("price", price.getText().toString());
                             product.put("name_owner", Name.getText().toString());
                             product.put("url_image", imageName);
+                            product.put("email_owner", User.email);
 
                             // Add a new document with a generated ID
                             db.collection("products")
@@ -146,7 +143,7 @@ public class AddProductActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            Toast.makeText(AddProductActivity.this, getString(R.string.done), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AddProductActivity.this, getString(R.string.done_add_product), Toast.LENGTH_SHORT).show();
 
                                             MainProductActivity.setGraphView(R.id.nav_home);
                                         }
@@ -172,7 +169,7 @@ public class AddProductActivity extends AppCompatActivity {
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage(getResources().getString(R.string.progress) + (int) progress + "%");
+                            progressDialog.setMessage( (int) progress + " % " + getResources().getString(R.string.progress));
                         }
                     });
         }
@@ -201,6 +198,8 @@ public class AddProductActivity extends AppCompatActivity {
 
             uploadData();
             return true;
+        } else if (id == R.id.skip){
+
         }
 
         return super.onOptionsItemSelected(item);
