@@ -336,7 +336,7 @@ public class MainProductActivity extends AppCompatActivity {
         menu.findItem(R.id.nav_profile).setVisible(false);
 
         final ImageView user_image_view = header.findViewById(R.id.profile_image);
-        user_image_view.setImageResource(R.mipmap.ic_launcher_round);
+        user_image_view.setImageResource(R.mipmap.ic_launcherr);
 
         // if profile fragment open close it
         setGraphView(R.id.nav_home);
